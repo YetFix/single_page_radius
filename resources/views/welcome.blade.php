@@ -185,6 +185,38 @@
         .abtn-ghost  { background: var(--n100); color: var(--n700); border: 1px solid var(--border); }
         .abtn-ghost:hover  { background: var(--n200); transform: none; }
 
+        /* ── OTHERS DROPDOWN ── */
+        .act-dropdown { position: relative; display: inline-flex; }
+        .act-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: calc(100% + 6px);
+            right: 0;
+            min-width: 200px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: 0 8px 24px rgba(0,0,0,.12);
+            z-index: 200;
+            overflow: hidden;
+        }
+        .act-dropdown.open .act-dropdown-menu { display: block; }
+        .act-dd-item {
+            display: flex; align-items: center; gap: 10px;
+            width: 100%; padding: 10px 16px;
+            background: none; border: none; cursor: pointer;
+            font-size: 13.5px; font-weight: 500; color: var(--n700);
+            font-family: inherit; text-align: left;
+            transition: background var(--ease), color var(--ease);
+        }
+        .act-dd-item i { width: 16px; text-align: center; color: var(--n400); font-size: 13px; }
+        .act-dd-item:hover { background: var(--n50); color: var(--n900); }
+        .act-dd-item:hover i { color: var(--primary-light); }
+        .act-dd-sep { height: 1px; background: var(--border); margin: 4px 0; }
+        .act-dd-item.dd-danger { color: var(--danger); }
+        .act-dd-item.dd-danger i { color: var(--danger); }
+        .act-dd-item.dd-danger:hover { background: #FEF2F2; }
+
         /* ── GRID ── */
         .grid {
             display: grid;
@@ -559,7 +591,7 @@
                 <div class="hero-meta">
                     <span><i class="fa fa-user" style="font-size:10px"></i> Kamrul</span>
                     <span><i class="fa fa-wifi" style="font-size:10px"></i>Package - Basic</span>
-                    <span><i class="fa fa-broadcast-tower" style="font-size:10px"></i> Pop - Nilkhet</span>
+                    <span><i class="fa fa-building" style="font-size:10px"></i> Pop - Nilkhet</span>
                     <span><i class="fa fa-calendar" style="font-size:10px"></i> Exp. Date - 12 Sep 2026</span>
                     <span><i class="fa fa-user-tie" style="font-size:10px"></i> Reseller - Local</span>
                 </div>
@@ -588,8 +620,53 @@
         <button class="abtn abtn-ghost"  @click="dlInvoice()">      <i class="fa fa-file-invoice"></i>   Invoice PDF</button>
         <button class="abtn abtn-teal"   @click="open('traffic')">  <i class="fa fa-chart-line"></i>     Live Traffic</button>
         <button class="abtn abtn-ghost"  @click="open('history')">  <i class="fa fa-history"></i>        Pay History</button>
-        <button class="abtn abtn-ghost"  @click="open('sessions')"> <i class="fa fa-network-wired"></i>  Sessions</button>
+       
         <button class="abtn abtn-purple" @click="open('sms')">        <i class="fa fa-envelope"></i>       Send SMS</button>
+
+        <!-- Others dropdown -->
+        <div class="act-dropdown" x-data="{ddOpen:false}" :class="{open:ddOpen}" @click.outside="ddOpen=false">
+            <button class="abtn abtn-ghost" @click="ddOpen=!ddOpen">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0">
+                    <rect x="0.5" y="0.5" width="6.5" height="6.5" rx="1.5" fill="currentColor"/>
+                    <rect x="9"   y="0.5" width="6.5" height="6.5" rx="1.5" fill="currentColor"/>
+                    <rect x="0.5" y="9"   width="6.5" height="6.5" rx="1.5" fill="currentColor"/>
+                    <rect x="9"   y="9"   width="6.5" height="6.5" rx="1"   transform="rotate(45 12.25 12.25)" fill="#0D9488"/>
+                </svg>
+                Others
+                <i class="fa fa-chevron-down" style="font-size:11px; margin-left:2px; transition:transform .2s" :style="ddOpen?'transform:rotate(180deg)':''"></i>
+            </button>
+            <div class="act-dropdown-menu">
+                <button class="act-dd-item" @click="cp(window.location.href); ddOpen=false">
+                    <i class="fa fa-link"></i> Copy Payment URL
+                </button>
+                <button class="act-dd-item" @click="toast('Opening QR print…','info'); ddOpen=false">
+                    <i class="fa fa-qrcode"></i> Print QR Code
+                </button>
+                <div class="act-dd-sep"></div>
+                <button class="act-dd-item" @click="open('editCustomer'); ddOpen=false">
+                    <i class="fa fa-edit"></i> Edit
+                </button>
+                <button class="act-dd-item" @click="open('editBillingType'); ddOpen=false">
+                    <i class="fa fa-sync-alt"></i> Bill Cycle Change
+                </button>
+                <button class="act-dd-item" @click="open('editExpiry'); ddOpen=false">
+                    <i class="fa fa-calendar-plus"></i> Expire Date Extend
+                </button>
+                <button class="act-dd-item" @click="open('editExtended'); ddOpen=false">
+                    <i class="fa fa-clock"></i> Auto Deactive Date
+                </button>
+                <button class="act-dd-item" @click="open('editPackage'); ddOpen=false">
+                    <i class="fa fa-cube"></i> Package Change
+                </button>
+                <div class="act-dd-sep"></div>
+                <button class="act-dd-item dd-danger" @click="toast('Customer disabled','error'); ddOpen=false">
+                    <i class="fa fa-ban"></i> Disable
+                </button>
+                <button class="act-dd-item dd-danger" @click="setStatus('Deactivated'); ddOpen=false">
+                    <i class="fa fa-times-circle"></i> Deactive
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- ══════════════════════════════════════════
