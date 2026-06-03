@@ -590,10 +590,10 @@
                 </div>
                 <div class="hero-meta">
                     <span><i class="fa fa-user" style="font-size:10px"></i> Kamrul</span>
-                    <span><i class="fa fa-wifi" style="font-size:10px"></i>Package - Basic</span>
+                    <span><i class="fa fa-wifi" style="font-size:10px"></i>Package - 5MBPS</span>
                     <span><i class="fa fa-building" style="font-size:10px"></i> Pop - Nilkhet</span>
                     <span><i class="fa fa-calendar" style="font-size:10px"></i> Exp. Date - 12 Sep 2026</span>
-                    <span><i class="fa fa-user-tie" style="font-size:10px"></i> Reseller - Local</span>
+                    <span><i class="fa fa-user-tie" style="font-size:10px"></i> Reseller - Badda</span>
                 </div>
             </div>
         </div>
@@ -665,6 +665,10 @@
                 <button class="act-dd-item dd-danger" @click="setStatus('Deactivated'); ddOpen=false">
                     <i class="fa fa-times-circle"></i> Deactive
                 </button>
+                <div class="act-dd-sep"></div>
+                <button class="act-dd-item" @click="open('editHistory'); ddOpen=false">
+                    <i class="fa fa-history"></i> Edit History
+                </button>
             </div>
         </div>
     </div>
@@ -727,7 +731,7 @@
             <!-- Reseller -->
             <div class="fr">
                 <span class="fl">Reseller</span>
-                <span class="fv">Local</span>
+                <span class="fv">Badda</span>
             </div>
 
             <!-- POP -->
@@ -758,7 +762,7 @@
             <!-- Package -->
             <div class="fr">
                 <span class="fl">Package</span>
-                <span class="fv">Basic Package</span>
+                <span class="fv">5MBPS</span>
                 <div class="fa-wrap">
                     <button class="fb fb-purple" @click="open('editPackage')" title="Change Package"><i class="fa fa-cube"></i></button>
                 </div>
@@ -1024,6 +1028,76 @@
      MODALS
 ════════════════════════════════════════════ -->
 
+<!-- ── EDIT HISTORY ── -->
+<div class="overlay" :class="{open: m.editHistory}" @click.self="close('editHistory')">
+    <div class="modal modal-wide">
+        <div class="mh">
+            <span class="mh-title"><i class="fa fa-history" style="color:#2563EB"></i> Edit History</span>
+            <button class="mclose" @click="close('editHistory')"><i class="fa fa-times"></i></button>
+        </div>
+        <div class="mbody" style="padding:0">
+            <table class="mtbl">
+                <thead>
+                    <tr>
+                        <th>Date & Time</th>
+                        <th>Field Changed</th>
+                        <th>Old Value</th>
+                        <th>New Value</th>
+                        <th>Changed By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="color:var(--n500); font-size:12px; white-space:nowrap">2026-06-03 14:22</td>
+                        <td><span class="tag" style="background:#EFF6FF;color:#2563EB;border:1px solid #BFDBFE;font-size:11px;padding:2px 7px;border-radius:4px">Package</span></td>
+                        <td style="color:var(--n500)">Standard Package</td>
+                        <td style="font-weight:600">Basic Package</td>
+                        <td style="color:var(--n500)">Admin</td>
+                    </tr>
+                    <tr>
+                        <td style="color:var(--n500); font-size:12px; white-space:nowrap">2026-05-20 10:05</td>
+                        <td><span class="tag" style="background:#F0FDF4;color:#059669;border:1px solid #A7F3D0;font-size:11px;padding:2px 7px;border-radius:4px">Contact</span></td>
+                        <td style="color:var(--n500)">01700000000</td>
+                        <td style="font-weight:600">01681046437</td>
+                        <td style="color:var(--n500)">Karim</td>
+                    </tr>
+                    <tr>
+                        <td style="color:var(--n500); font-size:12px; white-space:nowrap">2026-04-15 09:30</td>
+                        <td><span class="tag" style="background:#FFFBEB;color:#D97706;border:1px solid #FDE68A;font-size:11px;padding:2px 7px;border-radius:4px">Expiry</span></td>
+                        <td style="color:var(--n500)">2026-06-12</td>
+                        <td style="font-weight:600">2026-09-12</td>
+                        <td style="color:var(--n500)">Admin</td>
+                    </tr>
+                    <tr>
+                        <td style="color:var(--n500); font-size:12px; white-space:nowrap">2026-03-01 11:47</td>
+                        <td><span class="tag" style="background:#FAF5FF;color:#7C3AED;border:1px solid #DDD6FE;font-size:11px;padding:2px 7px;border-radius:4px">Status</span></td>
+                        <td style="color:var(--n500)">Expired</td>
+                        <td style="font-weight:600">Active</td>
+                        <td style="color:var(--n500)">Admin</td>
+                    </tr>
+                    <tr>
+                        <td style="color:var(--n500); font-size:12px; white-space:nowrap">2026-02-10 08:15</td>
+                        <td><span class="tag" style="background:#FFF1F2;color:#E11D48;border:1px solid #FECDD3;font-size:11px;padding:2px 7px;border-radius:4px">Address</span></td>
+                        <td style="color:var(--n500)">Mirpur, Dhaka</td>
+                        <td style="font-weight:600">Bashundhara, Sector#A</td>
+                        <td style="color:var(--n500)">Rahim</td>
+                    </tr>
+                    <tr>
+                        <td style="color:var(--n500); font-size:12px; white-space:nowrap">2026-01-05 16:00</td>
+                        <td><span class="tag" style="background:#EFF6FF;color:#2563EB;border:1px solid #BFDBFE;font-size:11px;padding:2px 7px;border-radius:4px">POP</span></td>
+                        <td style="color:var(--n500)">Dhanmondi</td>
+                        <td style="font-weight:600">Nilkhet</td>
+                        <td style="color:var(--n500)">Admin</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="mfoot">
+            <button class="btn btn-outline" @click="close('editHistory')"><i class="fa fa-times"></i> Close</button>
+        </div>
+    </div>
+</div>
+
 <!-- ── EDIT CUSTOMER ── -->
 <div class="overlay" :class="{open: m.editCustomer}" @click.self="close('editCustomer')">
     <div class="modal modal-wide">
@@ -1060,7 +1134,7 @@
                 <div class="fg">
                     <label class="flbl">Package</label>
                     <select class="finput fselect" x-model="f.editCustomer.package">
-                        <option>Basic Package</option>
+                        <option>5MBPS</option>
                         <option>Standard Package</option>
                         <option>Premium Package</option>
                         <option>Business Package</option>
@@ -1069,7 +1143,7 @@
                 <div class="fg">
                     <label class="flbl">Reseller</label>
                     <select class="finput fselect" x-model="f.editCustomer.reseller">
-                        <option>Local</option>
+                        <option>Badda</option>
                         <option>Reseller A</option>
                         <option>Reseller B</option>
                         <option>Direct</option>
@@ -1592,7 +1666,7 @@ function app() {
             sessions:false, addbill:false, editPackage:false, editStatus:false,
             editExpiry:false, editExtended:false, editDiscount:false,
             editFreeClient:false, editBillingType:false, editPop:false,
-            editContact:false, sms:false, editCustomer:false,
+            editContact:false, sms:false, editCustomer:false, editHistory:false,
         },
 
         f: {
@@ -1613,8 +1687,8 @@ function app() {
                 password:    '12345',
                 contact:     '01681046437',
                 address:     'Flat#3, Road#12, Bashundhara, Sector#A',
-                package:     'Basic Package',
-                reseller:    'Local',
+                package:     '5MBPS',
+                reseller:    'Badda',
                 billingDate: '12',
             },
         },
