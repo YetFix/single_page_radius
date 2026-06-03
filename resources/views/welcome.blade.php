@@ -549,6 +549,66 @@
             }
         }
 
+        /* ── DOCUMENTS SECTION ── */
+        .doc-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            margin-top: 14px;
+        }
+        .doc-head {
+            padding: 11px 16px;
+            border-bottom: 2px solid var(--primary-light);
+            background: var(--n50);
+            display: flex; align-items: center; gap: 10px;
+        }
+        .doc-head-title {
+            font-size: 13px; font-weight: 800; color: var(--primary-light);
+            letter-spacing: .6px; text-transform: uppercase;
+        }
+        .doc-row {
+            display: flex; align-items: center;
+            padding: 9px 16px; gap: 10px;
+            border-bottom: 1px solid var(--n100);
+            min-height: 44px; flex-wrap: wrap;
+            transition: background var(--ease);
+        }
+        .doc-row:last-child { border-bottom: none; }
+        .doc-row:hover { background: var(--n50); }
+        .doc-label {
+            font-size: 12px; color: var(--n500); font-weight: 600;
+            min-width: 112px; flex-shrink: 0;
+            text-transform: uppercase; letter-spacing: .3px;
+        }
+        .doc-file-wrap { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; flex-wrap: wrap; }
+        .doc-file-input { display: none; }
+        .doc-choose-btn {
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 5px 11px; border-radius: 5px; cursor: pointer;
+            font-size: 12.5px; font-weight: 500; font-family: inherit;
+            background: var(--n100); color: var(--n700);
+            border: 1px solid var(--border); transition: all var(--ease);
+            white-space: nowrap; flex-shrink: 0;
+        }
+        .doc-choose-btn:hover { background: var(--n200); }
+        .doc-filename {
+            font-size: 12.5px; color: var(--n400); font-style: italic;
+            flex: 1; min-width: 0; white-space: nowrap;
+            overflow: hidden; text-overflow: ellipsis;
+        }
+        .doc-filename.has-file { color: var(--n700); font-style: normal; font-weight: 500; }
+        .doc-vat-input {
+            padding: 5px 10px; border-radius: 5px;
+            border: 1px solid var(--border); font-size: 13px;
+            font-family: inherit; color: var(--n800);
+            background: var(--surface); width: 140px;
+            transition: border-color var(--ease);
+        }
+        .doc-vat-input:focus { outline: none; border-color: var(--primary-light); }
+        .doc-actions { display: flex; gap: 4px; flex-shrink: 0; margin-left: auto; }
+
         /* ── MOBILE TWEAKS ── */
         @media (max-width: 480px) {
             .hero { padding: 16px; }
@@ -1020,6 +1080,115 @@
         </div>
 
     </div><!-- /.session-onu-row -->
+
+    <!-- ══════════════════════════════════════════
+         DOCUMENTS
+    ═══════════════════════════════════════════ -->
+    <div class="doc-section" x-data="docManager()">
+
+        <div class="doc-head">
+            <div class="card-icon ci-blue"><i class="fa fa-folder-open"></i></div>
+            <span class="doc-head-title">Documents</span>
+        </div>
+
+        <!-- Photo -->
+        <div class="doc-row">
+            <span class="doc-label">Photo</span>
+            <div class="doc-file-wrap">
+                <input type="file" class="doc-file-input" id="doc-photo" accept="image/*" @change="pick($event,'photo')">
+                <label for="doc-photo" class="doc-choose-btn"><i class="fa fa-folder-open" style="font-size:11px"></i> Choose File</label>
+                <span class="doc-filename" :class="{'has-file': files.photo}" x-text="files.photo || 'No file chosen'"></span>
+            </div>
+            <div class="doc-actions">
+                <button class="fb fb-blue"  title="Upload"  @click="upload('photo')"><i class="fa fa-upload"></i></button>
+                <button class="fb fb-red"   title="Delete"  @click="del('photo')"><i class="fa fa-trash"></i></button>
+                <button class="fb fb-green" title="View"    @click="view('photo')"><i class="fa fa-eye"></i></button>
+            </div>
+        </div>
+
+        <!-- NID -->
+        <div class="doc-row">
+            <span class="doc-label">NID</span>
+            <div class="doc-file-wrap">
+                <input type="file" class="doc-file-input" id="doc-nid" accept="image/*,.pdf" @change="pick($event,'nid')">
+                <label for="doc-nid" class="doc-choose-btn"><i class="fa fa-folder-open" style="font-size:11px"></i> Choose File</label>
+                <span class="doc-filename" :class="{'has-file': files.nid}" x-text="files.nid || 'No file chosen'"></span>
+            </div>
+            <div class="doc-actions">
+                <button class="fb fb-blue"  title="Upload"  @click="upload('nid')"><i class="fa fa-upload"></i></button>
+                <button class="fb fb-red"   title="Delete"  @click="del('nid')"><i class="fa fa-trash"></i></button>
+                <button class="fb fb-green" title="View"    @click="view('nid')"><i class="fa fa-eye"></i></button>
+            </div>
+        </div>
+
+        <!-- VAT -->
+        <div class="doc-row">
+            <span class="doc-label">VAT</span>
+            <div class="doc-file-wrap">
+                
+                <input type="file" class="doc-file-input" id="doc-vat" accept="image/*,.pdf" @change="pick($event,'vat')">
+                <label for="doc-vat" class="doc-choose-btn"><i class="fa fa-folder-open" style="font-size:11px"></i> Choose File</label>
+                <span class="doc-filename" :class="{'has-file': files.vat}" x-text="files.vat || 'No file chosen'"></span>
+            </div>
+            <div class="doc-actions">
+                <button class="fb fb-blue"  title="Upload"  @click="upload('vat')"><i class="fa fa-upload"></i></button>
+                <button class="fb fb-red"   title="Delete"  @click="del('vat')"><i class="fa fa-trash"></i></button>
+                <button class="fb fb-green" title="View"    @click="view('vat')"><i class="fa fa-eye"></i></button>
+            </div>
+        </div>
+
+        <!-- Trade License -->
+        <div class="doc-row">
+            <span class="doc-label">Trade License</span>
+            <div class="doc-file-wrap">
+                <input type="file" class="doc-file-input" id="doc-trade" accept="image/*,.pdf" @change="pick($event,'trade')">
+                <label for="doc-trade" class="doc-choose-btn"><i class="fa fa-folder-open" style="font-size:11px"></i> Choose File</label>
+                <span class="doc-filename" :class="{'has-file': files.trade}" x-text="files.trade || 'No file chosen'"></span>
+            </div>
+            <div class="doc-actions">
+                <button class="fb fb-blue"  title="Upload"  @click="upload('trade')"><i class="fa fa-upload"></i></button>
+                <button class="fb fb-red"   title="Delete"  @click="del('trade')"><i class="fa fa-trash"></i></button>
+                <button class="fb fb-green" title="View"    @click="view('trade')"><i class="fa fa-eye"></i></button>
+            </div>
+        </div>
+
+        <!-- Other -->
+        <div class="doc-row">
+            <span class="doc-label">Other</span>
+            <div class="doc-file-wrap">
+                <input type="file" class="doc-file-input" id="doc-other" accept="image/*,.pdf,.doc,.docx" @change="pick($event,'other')">
+                <label for="doc-other" class="doc-choose-btn"><i class="fa fa-folder-open" style="font-size:11px"></i> Choose File</label>
+                <span class="doc-filename" :class="{'has-file': files.other}" x-text="files.other || 'No file chosen'"></span>
+            </div>
+            <div class="doc-actions">
+                <button class="fb fb-blue"  title="Upload"  @click="upload('other')"><i class="fa fa-upload"></i></button>
+                <button class="fb fb-red"   title="Delete"  @click="del('other')"><i class="fa fa-trash"></i></button>
+                <button class="fb fb-green" title="View"    @click="view('other')"><i class="fa fa-eye"></i></button>
+            </div>
+        </div>
+
+        <!-- Doc Viewer overlay -->
+        <div class="overlay" :class="{open: viewerOpen}" @click.self="viewerOpen=false" style="z-index:1100">
+            <div class="modal modal-wide">
+                <div class="mh">
+                    <span class="mh-title"><i class="fa fa-eye" style="color:#2563EB"></i> View Document — <span x-text="viewerLabel" style="text-transform:capitalize"></span></span>
+                    <button class="mclose" @click="viewerOpen=false"><i class="fa fa-times"></i></button>
+                </div>
+                <div class="mbody" style="display:flex;align-items:center;justify-content:center;min-height:220px;background:var(--n50)">
+                    <div style="text-align:center;color:var(--n400)">
+                        <i class="fa fa-file-image" style="font-size:48px;opacity:.4"></i>
+                        <p style="margin-top:12px;font-size:13px">Document preview would appear here.</p>
+                        <p style="font-size:12px;margin-top:4px">Connect to real storage to render the file.</p>
+                    </div>
+                </div>
+                <div class="mfoot">
+                    <button class="btn btn-outline" @click="viewerOpen=false">Close</button>
+                    <button class="btn btn-primary"><i class="fa fa-download"></i> Download</button>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /.doc-section -->
 
 </div><!-- /.page -->
 
@@ -1833,8 +2002,44 @@ function app() {
 
         init() {
             setInterval(() => { this.now = new Date().toLocaleTimeString(); }, 1000);
+            document.addEventListener('doc-toast', e => this.toast(e.detail.msg, e.detail.type));
         },
     }
+}
+
+function docManager() {
+    return {
+        vatReg: '',
+        files: { photo: '', nid: '', vat: '', trade: '', other: '' },
+        viewerOpen: false,
+        viewerLabel: '',
+
+        pick(event, key) {
+            const f = event.target.files[0];
+            this.files[key] = f ? f.name : '';
+        },
+
+        upload(key) {
+            if (!this.files[key]) {
+                Alpine.store && console.warn('no file');
+                document.dispatchEvent(new CustomEvent('doc-toast', { detail: { msg: 'Please choose a file first', type: 'error' } }));
+                return;
+            }
+            /* Real call: await fetch('/customers/1/documents', { method:'POST', body: formData }) */
+            document.dispatchEvent(new CustomEvent('doc-toast', { detail: { msg: `${this.files[key]} uploaded!`, type: 'success' } }));
+        },
+
+        del(key) {
+            this.files[key] = '';
+            /* Real call: await fetch(`/customers/1/documents/${key}`, { method:'DELETE' }) */
+            document.dispatchEvent(new CustomEvent('doc-toast', { detail: { msg: 'Document deleted', type: 'error' } }));
+        },
+
+        view(key) {
+            this.viewerLabel = key;
+            this.viewerOpen  = true;
+        },
+    };
 }
 </script>
 </body>
