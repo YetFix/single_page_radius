@@ -1,6 +1,6 @@
 # Project Single Page Design
 
-Brief description of the project.
+Single page for a csutomer
 
 ## Requirements
 
