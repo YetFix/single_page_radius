@@ -97,6 +97,276 @@
 
         .btn-pop-recharge:hover { background: var(--primary-dark); }
 
+        .btn-add-pop {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 0 18px; height: 38px;
+            background: linear-gradient(135deg, #0D9488, #14B8A6); color: #fff;
+            border: none; border-radius: 9px;
+            font-size: 13.5px; font-weight: 600; font-family: inherit;
+            cursor: pointer; white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(13,148,136,.3);
+            transition: filter .15s;
+        }
+
+        .btn-add-pop:hover { filter: brightness(1.08); }
+
+        /* ── ADD POP MODAL ── */
+        .ap-overlay {
+            position: fixed; inset: 0;
+            background: rgba(15,23,42,.6);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 500;
+            padding: 24px 16px;
+        }
+
+        @keyframes ap-pop {
+            from { opacity: 0; transform: translateY(14px) scale(.97); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .ap-modal {
+            background: var(--surface);
+            border-radius: 18px;
+            width: 100%;
+            max-width: 880px;
+            box-shadow: 0 32px 80px rgba(15,23,42,.32);
+            overflow: hidden;
+            animation: ap-pop .25s cubic-bezier(.21,1.02,.55,1);
+            max-height: 92vh;
+            display: flex; flex-direction: column;
+        }
+
+        .ap-head {
+            display: flex; align-items: center; gap: 14px;
+            padding: 20px 24px;
+            background: linear-gradient(135deg, #0F766E 0%, #0D9488 60%, #2DD4BF 100%);
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .ap-head::after {
+            content: '';
+            position: absolute; right: -30px; top: -40px;
+            width: 150px; height: 150px;
+            background: rgba(255,255,255,.08);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .ap-head-icon {
+            width: 42px; height: 42px;
+            background: rgba(255,255,255,.18);
+            border: 1px solid rgba(255,255,255,.25);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 17px;
+            flex-shrink: 0;
+        }
+
+        .ap-head-text { flex: 1; min-width: 0; }
+        .ap-head-text h2 { font-size: 18px; font-weight: 800; color: #fff; letter-spacing: -.3px; line-height: 1.2; }
+        .ap-head-text p  { font-size: 12px; color: rgba(255,255,255,.75); margin-top: 2px; }
+
+        .ap-close {
+            background: rgba(255,255,255,.18);
+            border: none; cursor: pointer;
+            font-size: 14px; color: #fff;
+            width: 32px; height: 32px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            transition: background .15s;
+            flex-shrink: 0;
+            position: relative; z-index: 1;
+        }
+
+        .ap-close:hover { background: rgba(255,255,255,.32); }
+
+        .ap-body { padding: 24px; display: flex; flex-direction: column; gap: 18px; overflow-y: auto; }
+
+        .ap-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+        .ap-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+
+        .ap-field > label {
+            font-size: 11px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: .6px;
+            color: var(--text-2);
+        }
+
+        .ap-field > label .req { color: var(--danger); }
+
+        .ap-field select,
+        .ap-field input {
+            width: 100%;
+            height: 46px;
+            padding: 0 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 11px;
+            font-size: 14px;
+            font-family: inherit;
+            color: var(--text);
+            background: #F8FAFC;
+            outline: none;
+            transition: border-color .15s, box-shadow .15s, background .15s;
+        }
+
+        .ap-field select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='6' viewBox='0 0 11 6'%3E%3Cpath d='M1 1l4.5 4L10 1' stroke='%2394A3B8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 36px;
+            cursor: pointer;
+        }
+
+        .ap-field select:focus,
+        .ap-field input:focus {
+            border-color: #0D9488;
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(13,148,136,.12);
+        }
+
+        .ap-field.has-err select,
+        .ap-field.has-err input { border-color: var(--danger); background: #fff; }
+
+        .ap-err { font-size: 12px; color: var(--danger); display: none; }
+        .ap-field.has-err .ap-err { display: block; }
+
+        .ap-divider { border: none; border-top: 1px solid var(--border); margin: 4px 0; }
+
+        .ap-sec-title {
+            font-size: 12px; font-weight: 800;
+            text-transform: uppercase; letter-spacing: .8px;
+            color: var(--text-2);
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .ap-sec-title i { color: #0D9488; }
+
+        .ap-foot {
+            display: flex; align-items: center; justify-content: flex-end; gap: 10px;
+            padding: 16px 24px;
+            border-top: 1px solid var(--border);
+            background: #FAFBFC;
+            flex-shrink: 0;
+        }
+
+        .ap-btn-close {
+            padding: 0 20px; height: 44px;
+            background: var(--surface);
+            border: 1.5px solid var(--border);
+            border-radius: 11px;
+            font-size: 14px; font-weight: 600; font-family: inherit;
+            color: var(--text-2);
+            cursor: pointer;
+            transition: all .15s;
+        }
+
+        .ap-btn-close:hover { border-color: var(--text-3); color: var(--text); }
+
+        .ap-btn-save {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 0 28px; height: 44px;
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            border: none;
+            border-radius: 11px;
+            font-size: 14px; font-weight: 700; font-family: inherit;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(37,99,235,.35);
+            transition: transform .15s, box-shadow .15s;
+        }
+
+        .ap-btn-save:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(37,99,235,.45); }
+
+        @media (max-width: 860px) { .ap-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 560px) { .ap-grid { grid-template-columns: 1fr; } }
+
+        /* ── POP RECHARGE MODAL ── */
+        .pr-modal { max-width: 540px; }
+
+        .pr-head { background: linear-gradient(135deg, #1D4ED8 0%, #3B82F6 60%, #60A5FA 100%); }
+
+        .pr-modal .ap-field select:focus,
+        .pr-modal .ap-field input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(37,99,235,.1);
+        }
+
+        .pr-balance {
+            display: inline-flex; align-items: center; gap: 7px;
+            margin-top: 2px;
+            padding: 6px 12px;
+            background: var(--success-bg);
+            border: 1px solid #A7F3D0;
+            border-radius: 8px;
+            font-size: 12px; font-weight: 600;
+            color: var(--success);
+            align-self: flex-start;
+        }
+
+        .pr-balance.neg { background: var(--danger-bg); border-color: #FECACA; color: var(--danger); }
+
+        .pr-amount-wrap { position: relative; }
+
+        .pr-amount-wrap .cur {
+            position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+            font-size: 15px; font-weight: 700; color: var(--text-3);
+            pointer-events: none;
+        }
+
+        .pr-amount-wrap input { padding-left: 34px; font-weight: 600; font-size: 15px; }
+
+        .pr-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+
+        .pr-chip {
+            padding: 6px 14px;
+            background: var(--surface);
+            border: 1.5px solid var(--border);
+            border-radius: 20px;
+            font-size: 12.5px; font-weight: 600; font-family: inherit;
+            color: var(--text-2);
+            cursor: pointer;
+            transition: all .15s;
+        }
+
+        .pr-chip:hover { border-color: var(--primary); color: var(--primary); }
+
+        .pr-chip.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(37,99,235,.3);
+        }
+
+        .pr-btn-recharge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 0 26px; height: 44px;
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            border: none;
+            border-radius: 11px;
+            font-size: 14px; font-weight: 700; font-family: inherit;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(37,99,235,.35);
+            transition: transform .15s, box-shadow .15s;
+        }
+
+        .pr-btn-recharge:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(37,99,235,.45); }
+
+        /* ── TOAST ── */
+        .ap-toast {
+            position: fixed; bottom: 24px; right: 24px; z-index: 999;
+            padding: 12px 18px;
+            background: var(--success);
+            color: #fff;
+            border-radius: 10px;
+            font-size: 13.5px; font-weight: 600;
+            box-shadow: 0 6px 24px rgba(0,0,0,.18);
+            display: flex; align-items: center; gap: 8px;
+        }
+
         /* ── TABLE CARD ── */
         .table-card {
             background: var(--surface);
@@ -431,14 +701,19 @@
     <div class="page-header">
         <div class="page-header-left">
             <h1 class="page-title">
-                <div class="page-title-icon"><i class="fa fa-tower-broadcast"></i></div>
+                <div class="page-title-icon"><i class="fa fa-building"></i></div>
                 POP / Zone List
             </h1>
             <div class="total-badge">Total POP: <span x-text="pops.length"></span></div>
         </div>
-        <button class="btn-pop-recharge">
-            <i class="fa fa-credit-card"></i> Pop Recharge
-        </button>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <button class="btn-add-pop" @click="openAdd()">
+                <i class="fa fa-building"></i> Add Pop
+            </button>
+            <button class="btn-pop-recharge" @click="openRecharge()">
+                <i class="fa fa-credit-card"></i> Pop Recharge
+            </button>
+        </div>
     </div>
 
     <!-- Table Card -->
@@ -620,12 +895,188 @@
     </div>
 </div>
 
+<!-- Add POP/Zone Modal -->
+<div class="ap-overlay" x-show="addOpen" x-transition.opacity.duration.200ms @click.self="addOpen = false" @keydown.escape.window="addOpen = false">
+    <div class="ap-modal" x-show="addOpen">
+        <div class="ap-head">
+            <div class="ap-head-icon"><i class="fa fa-tower-broadcast"></i></div>
+            <div class="ap-head-text">
+                <h2>Add New POP/Zone</h2>
+                <p>Create a new point of presence / zone</p>
+            </div>
+            <button class="ap-close" @click="addOpen = false"><i class="fa fa-xmark"></i></button>
+        </div>
+        <div class="ap-body">
+            <div class="ap-grid">
+                <div class="ap-field" :class="{ 'has-err': addErr.name }">
+                    <label>POP Name<span class="req">*</span></label>
+                    <input type="text" placeholder="Pop/Zone Name" x-model="addForm.name" @input="addErr.name = ''">
+                    <span class="ap-err" x-text="addErr.name"></span>
+                </div>
+                <div class="ap-field" :class="{ 'has-err': addErr.manager }">
+                    <label>Manager Name<span class="req">*</span></label>
+                    <select x-model="addForm.manager" @change="addErr.manager = ''">
+                        <option value="">Select an option</option>
+                        <template x-for="m in managerOptions" :key="m">
+                            <option :value="m" x-text="m"></option>
+                        </template>
+                    </select>
+                    <span class="ap-err" x-text="addErr.manager"></span>
+                </div>
+                <div class="ap-field" :class="{ 'has-err': addErr.location }">
+                    <label>POP Location<span class="req">*</span></label>
+                    <input type="text" placeholder="pop_location" x-model="addForm.location" @input="addErr.location = ''">
+                    <span class="ap-err" x-text="addErr.location"></span>
+                </div>
+                <div class="ap-field" :class="{ 'has-err': addErr.contact }">
+                    <label>POP Contact<span class="req">*</span></label>
+                    <input type="text" placeholder="pop_contact" x-model="addForm.contact" @input="addErr.contact = ''">
+                    <span class="ap-err" x-text="addErr.contact"></span>
+                </div>
+                <div class="ap-field" :class="{ 'has-err': addErr.mikrotikIP }">
+                    <label>Mikrotik IP<span class="req">*</span></label>
+                    <select x-model="addForm.mikrotikIP" @change="addErr.mikrotikIP = ''">
+                        <option value="">Select an option</option>
+                        <template x-for="ip in mikrotikIPs" :key="ip">
+                            <option :value="ip" x-text="ip"></option>
+                        </template>
+                    </select>
+                    <span class="ap-err" x-text="addErr.mikrotikIP"></span>
+                </div>
+                <div class="ap-field" :class="{ 'has-err': addErr.longitude }">
+                    <label>Longitude<span class="req">*</span></label>
+                    <input type="text" placeholder="YY" x-model="addForm.longitude" @input="addErr.longitude = ''">
+                    <span class="ap-err" x-text="addErr.longitude"></span>
+                </div>
+                <div class="ap-field" :class="{ 'has-err': addErr.latitude }">
+                    <label>Latitude<span class="req">*</span></label>
+                    <input type="text" placeholder="XX" x-model="addForm.latitude" @input="addErr.latitude = ''">
+                    <span class="ap-err" x-text="addErr.latitude"></span>
+                </div>
+                <div class="ap-field">
+                    <label>Sub Manager</label>
+                    <select x-model="addForm.subManager">
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                    </select>
+                </div>
+            </div>
+
+            <hr class="ap-divider">
+
+            <div class="ap-sec-title"><i class="fa fa-percent"></i> Gateway Charges In %</div>
+            <div class="ap-grid">
+                <div class="ap-field">
+                    <label>Bkash</label>
+                    <input type="number" min="0" step="0.01" placeholder="Bkash Charges" x-model.number="addForm.bkash">
+                </div>
+                <div class="ap-field">
+                    <label>Nagad</label>
+                    <input type="number" min="0" step="0.01" placeholder="Nagad Charges" x-model.number="addForm.nagad">
+                </div>
+                <div class="ap-field">
+                    <label>Upay</label>
+                    <input type="number" min="0" step="0.01" placeholder="Upay Charges" x-model.number="addForm.upay">
+                </div>
+            </div>
+        </div>
+        <div class="ap-foot">
+            <button class="ap-btn-close" @click="addOpen = false">Close</button>
+            <button class="ap-btn-save" @click="submitAdd()">
+                <i class="fa fa-floppy-disk"></i> Save
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Pop Recharge Modal -->
+<div class="ap-overlay" x-show="rcOpen" x-transition.opacity.duration.200ms @click.self="rcOpen = false" @keydown.escape.window="rcOpen = false">
+    <div class="ap-modal pr-modal" x-show="rcOpen">
+        <div class="ap-head pr-head">
+            <div class="ap-head-icon"><i class="fa fa-credit-card"></i></div>
+            <div class="ap-head-text">
+                <h2>Pop Recharge</h2>
+                <p>Add balance to a POP/Zone account</p>
+            </div>
+            <button class="ap-close" @click="rcOpen = false"><i class="fa fa-xmark"></i></button>
+        </div>
+        <div class="ap-body">
+            <div class="ap-field" :class="{ 'has-err': rcErr.to }">
+                <label>Recharge To</label>
+                <select x-model="rcForm.to" @change="rcErr.to = ''">
+                    <option value="">Select an option</option>
+                    <template x-for="p in pops" :key="p.id">
+                        <option :value="p.id" x-text="p.name"></option>
+                    </template>
+                </select>
+                <span class="ap-err" x-text="rcErr.to"></span>
+                <template x-if="rcPop">
+                    <span class="pr-balance" :class="{ neg: rcPop.balance < 0 }">
+                        <i class="fa fa-wallet"></i>
+                        Current balance: ৳<span x-text="rcPop.balance.toFixed(2)"></span>
+                    </span>
+                </template>
+            </div>
+            <div class="ap-field" :class="{ 'has-err': rcErr.amount }">
+                <label>Recharge Amount</label>
+                <div class="pr-amount-wrap">
+                    <span class="cur">৳</span>
+                    <input type="number" min="1" placeholder="0.00" x-model.number="rcForm.amount" @input="rcErr.amount = ''">
+                </div>
+                <span class="ap-err" x-text="rcErr.amount"></span>
+                <div class="pr-chips">
+                    <template x-for="a in quickAmounts" :key="a">
+                        <button type="button" class="pr-chip" :class="{ active: rcForm.amount === a }"
+                                @click="rcForm.amount = a; rcErr.amount = ''" x-text="'৳' + a.toLocaleString()"></button>
+                    </template>
+                </div>
+            </div>
+            <div class="ap-field">
+                <label>Remark</label>
+                <input type="text" placeholder="e.g. Monthly bill payment" x-model="rcForm.remark">
+            </div>
+        </div>
+        <div class="ap-foot">
+            <button class="ap-btn-close" @click="rcOpen = false">Close</button>
+            <button class="pr-btn-recharge" @click="submitRecharge()">
+                <i class="fa fa-bolt"></i>
+                <span x-text="rcForm.amount > 0 ? 'Recharge ৳' + Number(rcForm.amount).toLocaleString() : 'Recharge'"></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="ap-toast" x-show="toastMsg" x-transition.opacity>
+    <i class="fa fa-circle-check"></i>
+    <span x-text="toastMsg"></span>
+</div>
+
 <script>
 function popList() {
     return {
         query:       '',
         perPage:     100,
         currentPage: 1,
+
+        addOpen:  false,
+        addForm:  {},
+        addErr:   {},
+        toastMsg: '',
+
+        rcOpen: false,
+        rcForm: { to: '', amount: '', remark: '' },
+        rcErr:  { to: '', amount: '' },
+        quickAmounts: [500, 1000, 2000, 5000],
+
+        get rcPop() {
+            return this.pops.find(p => p.id == this.rcForm.to) || null;
+        },
+        mikrotikIPs: ['10.10.112.74', '103.180.204.129', '192.168.10.1', '172.16.0.1'],
+
+        get managerOptions() {
+            return [...new Set(this.pops.map(p => p.manager))];
+        },
 
         pops: [
             {
@@ -699,6 +1150,71 @@ function popList() {
             const start = (this.currentPage - 1) * this.perPage + 1;
             const end   = Math.min(this.currentPage * this.perPage, this.filtered.length);
             return `Showing ${start} to ${end} of ${this.filtered.length} entries`;
+        },
+
+        openAdd() {
+            this.addForm = {
+                name: '', manager: '', location: '', contact: '',
+                mikrotikIP: '', longitude: '', latitude: '', subManager: 'No',
+                bkash: '', nagad: '', upay: '',
+            };
+            this.addErr  = {};
+            this.addOpen = true;
+        },
+
+        submitAdd() {
+            const f = this.addForm;
+            const err = {};
+            if (!f.name.trim())      err.name       = 'POP name is required';
+            if (!f.manager)          err.manager    = 'Please select a manager';
+            if (!f.location.trim())  err.location   = 'Location is required';
+            if (!f.contact.trim())   err.contact    = 'Contact is required';
+            if (!f.mikrotikIP)       err.mikrotikIP = 'Please select a Mikrotik IP';
+            if (!f.longitude.trim()) err.longitude  = 'Longitude is required';
+            if (!f.latitude.trim())  err.latitude   = 'Latitude is required';
+            this.addErr = err;
+            if (Object.keys(err).length) return;
+
+            this.pops.unshift({
+                id: Math.max(0, ...this.pops.map(p => p.id)) + 1,
+                name: f.name.trim(),
+                manager: f.manager,
+                location: f.location.trim(),
+                nasIP: f.mikrotikIP,
+                contact: f.contact.trim(),
+                subManager: f.subManager === 'Yes',
+                billGenerate: true,
+                balance: 0,
+                totalCustomers: 0,
+                smsStatus: true,
+            });
+            this.addOpen = false;
+            this.showToast(`POP "${f.name.trim()}" added`);
+        },
+
+        openRecharge() {
+            this.rcForm = { to: '', amount: '', remark: '' };
+            this.rcErr  = { to: '', amount: '' };
+            this.rcOpen = true;
+        },
+
+        submitRecharge() {
+            const f = this.rcForm;
+            const err = {};
+            if (!f.to)                              err.to = 'Please select a POP';
+            if (!f.amount || Number(f.amount) <= 0) err.amount = 'Enter a valid amount';
+            this.rcErr = err;
+            if (Object.keys(err).length) return;
+
+            const pop = this.pops.find(p => p.id == f.to);
+            if (pop) pop.balance += Number(f.amount);
+            this.rcOpen = false;
+            this.showToast(`${pop ? pop.name : 'POP'} recharged ৳${Number(f.amount).toFixed(2)}`);
+        },
+
+        showToast(msg) {
+            this.toastMsg = msg;
+            setTimeout(() => { this.toastMsg = ''; }, 2800);
         },
     };
 }

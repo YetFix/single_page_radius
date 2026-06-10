@@ -114,6 +114,27 @@
 
         .btn-mgr-recharge:hover { background: var(--primary-dark); }
 
+        .btn-add-mgr {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 18px;
+            height: 38px;
+            background: var(--success);
+            color: #fff;
+            border: none;
+            border-radius: 9px;
+            font-size: 13.5px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(5,150,105,.28);
+            transition: filter .15s;
+            white-space: nowrap;
+        }
+
+        .btn-add-mgr:hover { filter: brightness(1.08); }
+
         /* ── MAIN CARD ── */
         .table-card {
             background: var(--surface);
@@ -497,6 +518,297 @@
             .tbl-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
             .search-wrap input { width: 180px; }
         }
+        /* ── RECHARGE MODAL ── */
+        .rc-overlay {
+            position: fixed; inset: 0;
+            background: rgba(15,23,42,.6);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 500;
+            padding: 24px 16px;
+        }
+
+        @keyframes rc-pop {
+            from { opacity: 0; transform: translateY(14px) scale(.97); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .rc-modal {
+            background: var(--surface);
+            border-radius: 18px;
+            width: 100%;
+            max-width: 540px;
+            box-shadow: 0 32px 80px rgba(15,23,42,.32);
+            overflow: hidden;
+            animation: rc-pop .25s cubic-bezier(.21,1.02,.55,1);
+            max-height: 92vh;
+            display: flex; flex-direction: column;
+        }
+
+        .rc-head {
+            display: flex; align-items: center; gap: 14px;
+            padding: 20px 24px;
+            background: linear-gradient(135deg, #1D4ED8 0%, #3B82F6 60%, #60A5FA 100%);
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .rc-head::after {
+            content: '';
+            position: absolute; right: -30px; top: -40px;
+            width: 150px; height: 150px;
+            background: rgba(255,255,255,.08);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .rc-head-icon {
+            width: 42px; height: 42px;
+            background: rgba(255,255,255,.18);
+            border: 1px solid rgba(255,255,255,.25);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 17px;
+            flex-shrink: 0;
+        }
+
+        .rc-head-text { flex: 1; min-width: 0; }
+        .rc-head-text h2 { font-size: 18px; font-weight: 800; color: #fff; letter-spacing: -.3px; line-height: 1.2; }
+        .rc-head-text p  { font-size: 12px; color: rgba(255,255,255,.75); margin-top: 2px; }
+
+        .rc-close {
+            background: rgba(255,255,255,.18);
+            border: none; cursor: pointer;
+            font-size: 14px; color: #fff;
+            width: 32px; height: 32px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            transition: background .15s;
+            flex-shrink: 0;
+            position: relative; z-index: 1;
+        }
+
+        .rc-close:hover { background: rgba(255,255,255,.32); }
+
+        .rc-body { padding: 24px; display: flex; flex-direction: column; gap: 18px; overflow-y: auto; }
+
+        .rc-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+
+        .rc-field > label {
+            font-size: 11px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: .6px;
+            color: var(--text-2);
+        }
+
+        .rc-field > label .req { color: var(--danger); }
+
+        .rc-field select,
+        .rc-field input {
+            width: 100%;
+            height: 46px;
+            padding: 0 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 11px;
+            font-size: 14px;
+            font-family: inherit;
+            color: var(--text);
+            background: #F8FAFC;
+            outline: none;
+            transition: border-color .15s, box-shadow .15s, background .15s;
+        }
+
+        .rc-field select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='6' viewBox='0 0 11 6'%3E%3Cpath d='M1 1l4.5 4L10 1' stroke='%2394A3B8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 36px;
+            cursor: pointer;
+        }
+
+        .rc-field select:focus,
+        .rc-field input:focus {
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(37,99,235,.1);
+        }
+
+        .rc-field.has-err select,
+        .rc-field.has-err input { border-color: var(--danger); background: #fff; }
+
+        .rc-err { font-size: 12px; color: var(--danger); display: none; }
+        .rc-field.has-err .rc-err { display: block; }
+
+        /* balance preview chip */
+        .rc-balance {
+            display: inline-flex; align-items: center; gap: 7px;
+            margin-top: 2px;
+            padding: 6px 12px;
+            background: var(--success-bg);
+            border: 1px solid #A7F3D0;
+            border-radius: 8px;
+            font-size: 12px; font-weight: 600;
+            color: var(--success);
+            align-self: flex-start;
+        }
+
+        .rc-balance.neg { background: var(--danger-bg); border-color: #FECACA; color: var(--danger); }
+
+        /* amount with currency prefix */
+        .rc-amount-wrap { position: relative; }
+
+        .rc-amount-wrap .cur {
+            position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+            font-size: 15px; font-weight: 700; color: var(--text-3);
+            pointer-events: none;
+        }
+
+        .rc-amount-wrap input { padding-left: 34px; font-weight: 600; font-size: 15px; }
+
+        /* quick amount chips */
+        .rc-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+
+        .rc-chip {
+            padding: 6px 14px;
+            background: var(--surface);
+            border: 1.5px solid var(--border);
+            border-radius: 20px;
+            font-size: 12.5px; font-weight: 600; font-family: inherit;
+            color: var(--text-2);
+            cursor: pointer;
+            transition: all .15s;
+        }
+
+        .rc-chip:hover { border-color: var(--primary); color: var(--primary); }
+
+        .rc-chip.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(37,99,235,.3);
+        }
+
+        .rc-foot {
+            display: flex; align-items: center; justify-content: flex-end; gap: 10px;
+            padding: 16px 24px;
+            border-top: 1px solid var(--border);
+            background: #FAFBFC;
+            flex-shrink: 0;
+        }
+
+        .rc-btn-close {
+            padding: 0 20px; height: 44px;
+            background: var(--surface);
+            border: 1.5px solid var(--border);
+            border-radius: 11px;
+            font-size: 14px; font-weight: 600; font-family: inherit;
+            color: var(--text-2);
+            cursor: pointer;
+            transition: all .15s;
+        }
+
+        .rc-btn-close:hover { border-color: var(--text-3); color: var(--text); }
+
+        .rc-btn-recharge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 0 26px; height: 44px;
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            border: none;
+            border-radius: 11px;
+            font-size: 14px; font-weight: 700; font-family: inherit;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(37,99,235,.35);
+            transition: transform .15s, box-shadow .15s;
+        }
+
+        .rc-btn-recharge:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(37,99,235,.45); }
+        .rc-btn-recharge:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+        /* ── ADD MANAGER MODAL ── */
+        .am-modal { max-width: 880px; }
+
+        .am-head { background: linear-gradient(135deg, #047857 0%, #059669 60%, #34D399 100%); }
+
+        .am-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+        .am-divider { border: none; border-top: 1px solid var(--border); margin: 4px 0; }
+
+        .am-sec-title {
+            font-size: 12px; font-weight: 800;
+            text-transform: uppercase; letter-spacing: .8px;
+            color: var(--text-2);
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .am-sec-title i { color: var(--success); }
+
+        .rc-field input[type="file"] {
+            padding: 0;
+            background: #F8FAFC;
+            cursor: pointer;
+            display: flex; align-items: center;
+        }
+
+        .rc-field input[type="file"]::file-selector-button {
+            height: 100%;
+            padding: 0 14px;
+            margin-right: 12px;
+            border: none;
+            border-right: 1.5px solid var(--border);
+            background: var(--surface);
+            font-size: 13px; font-weight: 600; font-family: inherit;
+            color: var(--text-2);
+            cursor: pointer;
+            transition: background .15s;
+        }
+
+        .rc-field input[type="file"]::file-selector-button:hover { background: var(--bg); }
+
+        .am-btn-save {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 0 26px; height: 44px;
+            background: linear-gradient(135deg, #059669, #047857);
+            border: none;
+            border-radius: 11px;
+            font-size: 14px; font-weight: 700; font-family: inherit;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(5,150,105,.35);
+            transition: transform .15s, box-shadow .15s;
+        }
+
+        .am-btn-save:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(5,150,105,.45); }
+
+        .am-btn-reset {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 0 20px; height: 44px;
+            background: linear-gradient(135deg, #14B8A6, #0D9488);
+            border: none;
+            border-radius: 11px;
+            font-size: 14px; font-weight: 600; font-family: inherit;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(20,184,166,.3);
+            transition: transform .15s;
+        }
+
+        .am-btn-reset:hover { transform: translateY(-1px); }
+
+        @media (max-width: 860px) { .am-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 560px) { .am-grid { grid-template-columns: 1fr; } }
+
+        /* ── TOAST ── */
+        .rc-toast {
+            position: fixed; bottom: 24px; right: 24px; z-index: 999;
+            padding: 12px 18px;
+            background: var(--success);
+            color: #fff;
+            border-radius: 10px;
+            font-size: 13.5px; font-weight: 600;
+            box-shadow: 0 6px 24px rgba(0,0,0,.18);
+            display: flex; align-items: center; gap: 8px;
+        }
     </style>
 </head>
 <body x-data="managerList()" x-cloak>
@@ -512,9 +824,14 @@
             </h1>
             <div class="total-badge">Total Manager: <span x-text="managers.length"></span></div>
         </div>
-        <button class="btn-mgr-recharge">
-            <i class="fa fa-credit-card"></i> Manager Recharge
-        </button>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <button class="btn-add-mgr" @click="openAdd()">
+                <i class="fa fa-user-plus"></i> Add Manager
+            </button>
+            <button class="btn-mgr-recharge" @click="openRecharge()">
+                <i class="fa fa-credit-card"></i> Manager Recharge
+            </button>
+        </div>
     </div>
 
     <!-- Table Card -->
@@ -714,6 +1031,171 @@
     </div>
 </div>
 
+<!-- Manager Recharge Modal -->
+<div class="rc-overlay" x-show="rechargeOpen" x-transition.opacity.duration.200ms @click.self="rechargeOpen = false" @keydown.escape.window="rechargeOpen = false">
+    <div class="rc-modal" x-show="rechargeOpen">
+        <div class="rc-head">
+            <div class="rc-head-icon"><i class="fa fa-credit-card"></i></div>
+            <div class="rc-head-text">
+                <h2>Manager Recharge</h2>
+                <p>Add balance to a manager's account</p>
+            </div>
+            <button class="rc-close" @click="rechargeOpen = false"><i class="fa fa-xmark"></i></button>
+        </div>
+        <div class="rc-body">
+            <div class="rc-field" :class="{ 'has-err': rechargeErr.to }">
+                <label>Recharge To</label>
+                <select x-model="rechargeForm.to" @change="rechargeErr.to = ''">
+                    <option value="">Select an option</option>
+                    <template x-for="m in managers" :key="m.id">
+                        <option :value="m.id" x-text="m.name"></option>
+                    </template>
+                </select>
+                <span class="rc-err" x-text="rechargeErr.to"></span>
+                <template x-if="rechargeManager">
+                    <span class="rc-balance" :class="{ neg: rechargeManager.balance < 0 }">
+                        <i class="fa fa-wallet"></i>
+                        Current balance: ৳<span x-text="rechargeManager.balance.toFixed(2)"></span>
+                    </span>
+                </template>
+            </div>
+            <div class="rc-field" :class="{ 'has-err': rechargeErr.amount }">
+                <label>Recharge Amount</label>
+                <div class="rc-amount-wrap">
+                    <span class="cur">৳</span>
+                    <input type="number" min="1" placeholder="0.00" x-model.number="rechargeForm.amount" @input="rechargeErr.amount = ''">
+                </div>
+                <span class="rc-err" x-text="rechargeErr.amount"></span>
+                <div class="rc-chips">
+                    <template x-for="a in quickAmounts" :key="a">
+                        <button type="button" class="rc-chip" :class="{ active: rechargeForm.amount === a }"
+                                @click="rechargeForm.amount = a; rechargeErr.amount = ''" x-text="'৳' + a.toLocaleString()"></button>
+                    </template>
+                </div>
+            </div>
+            <div class="rc-field" :class="{ 'has-err': rechargeErr.remark }">
+                <label>Remark<span class="req">*</span></label>
+                <input type="text" placeholder="e.g. Monthly bill payment" x-model="rechargeForm.remark" @input="rechargeErr.remark = ''">
+                <span class="rc-err" x-text="rechargeErr.remark"></span>
+            </div>
+        </div>
+        <div class="rc-foot">
+            <button class="rc-btn-close" @click="rechargeOpen = false">Close</button>
+            <button class="rc-btn-recharge" @click="submitRecharge()">
+                <i class="fa fa-bolt"></i>
+                <span x-text="rechargeForm.amount > 0 ? 'Recharge ৳' + Number(rechargeForm.amount).toLocaleString() : 'Recharge'"></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Add Manager Modal -->
+<div class="rc-overlay" x-show="addOpen" x-transition.opacity.duration.200ms @click.self="addOpen = false" @keydown.escape.window="addOpen = false">
+    <div class="rc-modal am-modal" x-show="addOpen">
+        <div class="rc-head am-head">
+            <div class="rc-head-icon"><i class="fa fa-user-plus"></i></div>
+            <div class="rc-head-text">
+                <h2>Add New Manager</h2>
+                <p>Create a new manager / reseller account</p>
+            </div>
+            <button class="rc-close" @click="addOpen = false"><i class="fa fa-xmark"></i></button>
+        </div>
+        <div class="rc-body">
+            <div class="am-grid">
+                <div class="rc-field" :class="{ 'has-err': addErr.name }">
+                    <label>Manager Name<span class="req">*</span></label>
+                    <input type="text" placeholder="Manager Name" x-model="addForm.name" @input="addErr.name = ''">
+                    <span class="rc-err" x-text="addErr.name"></span>
+                </div>
+                <div class="rc-field" :class="{ 'has-err': addErr.type }">
+                    <label>Manager Type<span class="req">*</span></label>
+                    <select x-model="addForm.type" @change="addErr.type = ''">
+                        <option value="">Select an option</option>
+                        <option value="own">Own</option>
+                        <option value="reseller">Reseller</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <span class="rc-err" x-text="addErr.type"></span>
+                </div>
+                <div class="rc-field" :class="{ 'has-err': addErr.contact }">
+                    <label>Contact<span class="req">*</span></label>
+                    <input type="text" placeholder="Contact" x-model="addForm.contact" @input="addErr.contact = ''">
+                    <span class="rc-err" x-text="addErr.contact"></span>
+                </div>
+                <div class="rc-field" :class="{ 'has-err': addErr.address }">
+                    <label>Address<span class="req">*</span></label>
+                    <input type="text" placeholder="Address" x-model="addForm.address" @input="addErr.address = ''">
+                    <span class="rc-err" x-text="addErr.address"></span>
+                </div>
+                <div class="rc-field">
+                    <label>Remark</label>
+                    <input type="text" placeholder="remark" x-model="addForm.remark">
+                </div>
+                <div class="rc-field">
+                    <label>Upload File</label>
+                    <input type="file">
+                </div>
+                <div class="rc-field">
+                    <label>Manager Miscellaneous Expense</label>
+                    <input type="number" min="0" placeholder="Commission in percentage" x-model.number="addForm.expense">
+                </div>
+                <div class="rc-field">
+                    <label>Bank Name</label>
+                    <input type="text" placeholder="Bank Name" x-model="addForm.bankName">
+                </div>
+                <div class="rc-field">
+                    <label>Branch Name</label>
+                    <input type="text" placeholder="Branch Name" x-model="addForm.branchName">
+                </div>
+                <div class="rc-field">
+                    <label>Routing Number</label>
+                    <input type="text" placeholder="Routing Number" x-model="addForm.routingNo">
+                </div>
+                <div class="rc-field">
+                    <label>Bank Account No</label>
+                    <input type="text" placeholder="Bank Account No" x-model="addForm.accountNo">
+                </div>
+                <div class="rc-field">
+                    <label>Account Name</label>
+                    <input type="text" placeholder="Account Name" x-model="addForm.accountName">
+                </div>
+            </div>
+
+            <hr class="am-divider">
+
+            <div class="am-sec-title"><i class="fa fa-percent"></i> Gateway Charges In %</div>
+            <div class="am-grid">
+                <div class="rc-field">
+                    <label>Bkash</label>
+                    <input type="number" min="0" step="0.01" placeholder="Bkash Charges" x-model.number="addForm.bkash">
+                </div>
+                <div class="rc-field">
+                    <label>Nagad</label>
+                    <input type="number" min="0" step="0.01" placeholder="Nagad Charges" x-model.number="addForm.nagad">
+                </div>
+                <div class="rc-field">
+                    <label>Upay</label>
+                    <input type="number" min="0" step="0.01" placeholder="Upay Charges" x-model.number="addForm.upay">
+                </div>
+            </div>
+        </div>
+        <div class="rc-foot">
+            <button class="am-btn-reset" @click="resetAdd()">
+                <i class="fa fa-rotate-left"></i> Reset
+            </button>
+            <button class="am-btn-save" @click="submitAdd()">
+                <i class="fa fa-floppy-disk"></i> Save
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="rc-toast" x-show="toastMsg" x-transition.opacity>
+    <i class="fa fa-circle-check"></i>
+    <span x-text="toastMsg"></span>
+</div>
+
 <style>
     /* Show status badge in mob-head only on mobile */
     @media (max-width: 700px) {
@@ -730,6 +1212,20 @@ function managerList() {
         query:       '',
         perPage:     100,
         currentPage: 1,
+
+        rechargeOpen: false,
+        rechargeForm: { to: '', amount: '', remark: '' },
+        rechargeErr:  { to: '', amount: '', remark: '' },
+        quickAmounts: [500, 1000, 2000, 5000],
+        toastMsg:     '',
+
+        addOpen: false,
+        addForm: {},
+        addErr:  {},
+
+        get rechargeManager() {
+            return this.managers.find(m => m.id == this.rechargeForm.to) || null;
+        },
 
         managers: [
             { id: 8, name: 'Uttara-Central',  type: 'own',      address: 'Uttara Sector 7',      contact: '01711223344', balance:  2500.00, totalCustomers: 312, remark: 'High traffic zone',    status: 'Active'    },
@@ -769,6 +1265,75 @@ function managerList() {
             const start = (this.currentPage - 1) * this.perPage + 1;
             const end   = Math.min(this.currentPage * this.perPage, this.filtered.length);
             return `Showing ${start} to ${end} of ${this.filtered.length} entries`;
+        },
+
+        openRecharge() {
+            this.rechargeForm = { to: '', amount: '', remark: '' };
+            this.rechargeErr  = { to: '', amount: '', remark: '' };
+            this.rechargeOpen = true;
+        },
+
+        submitRecharge() {
+            const f = this.rechargeForm;
+            let ok = true;
+            if (!f.to)                              { this.rechargeErr.to = 'Please select a manager';  ok = false; }
+            if (!f.amount || Number(f.amount) <= 0) { this.rechargeErr.amount = 'Enter a valid amount'; ok = false; }
+            if (!f.remark.trim())                   { this.rechargeErr.remark = 'Remark is required';   ok = false; }
+            if (!ok) return;
+
+            const mgr = this.managers.find(m => m.id == f.to);
+            if (mgr) mgr.balance += Number(f.amount);
+            this.rechargeOpen = false;
+            this.showToast(`${mgr ? mgr.name : 'Manager'} recharged ${Number(f.amount).toFixed(2)}`);
+        },
+
+        showToast(msg) {
+            this.toastMsg = msg;
+            setTimeout(() => { this.toastMsg = ''; }, 2800);
+        },
+
+        blankAddForm() {
+            return {
+                name: '', type: '', contact: '', address: '', remark: '',
+                expense: '', bankName: '', branchName: '', routingNo: '',
+                accountNo: '', accountName: '', bkash: '', nagad: '', upay: '',
+            };
+        },
+
+        openAdd() {
+            this.addForm = this.blankAddForm();
+            this.addErr  = {};
+            this.addOpen = true;
+        },
+
+        resetAdd() {
+            this.addForm = this.blankAddForm();
+            this.addErr  = {};
+        },
+
+        submitAdd() {
+            const f = this.addForm;
+            const err = {};
+            if (!f.name.trim())    err.name    = 'Manager name is required';
+            if (!f.type)           err.type    = 'Please select a type';
+            if (!f.contact.trim()) err.contact = 'Contact is required';
+            if (!f.address.trim()) err.address = 'Address is required';
+            this.addErr = err;
+            if (Object.keys(err).length) return;
+
+            this.managers.unshift({
+                id: Math.max(0, ...this.managers.map(m => m.id)) + 1,
+                name: f.name.trim(),
+                type: f.type,
+                address: f.address.trim(),
+                contact: f.contact.trim(),
+                balance: 0,
+                totalCustomers: 0,
+                remark: f.remark.trim(),
+                status: 'Active',
+            });
+            this.addOpen = false;
+            this.showToast(`Manager "${f.name.trim()}" added`);
         },
     };
 }
