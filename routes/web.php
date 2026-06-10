@@ -46,3 +46,51 @@ Route::get('/sms-gateway', function () {
     return view('sms-gateway');
 });
 
+Route::get('/sms-settings', function () {
+    return view('sms-settings');
+});
+
+Route::get('/sms-logs', function () {
+    return view('sms-logs');
+});
+
+Route::get('/tokens', function () {
+    return view('tokens');
+});
+
+Route::get('/users', function () {
+    return view('users');
+});
+
+Route::get('/settings', function () {
+    return view('settings');
+});
+
+Route::get('/roles', function () {
+    return view('roles');
+});
+
+Route::get('/permissions', function () {
+    return view('permissions');
+});
+
+Route::get('/payment-history', function () {
+    return view('payment-history');
+});
+
+Route::get('/mikrotiks', function () {
+    return view('mikrotiks');
+});
+
+Route::get('/sync', function () {
+    return view('sync');
+});
+
+Route::get('/online', function () {
+    return view('online');
+});
+
+Route::get('/offline', function () {
+    return view('offline');
+});
+
