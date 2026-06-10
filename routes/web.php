@@ -6,10 +6,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/customers/{id}', function ($id) {
-    $customer = [
-        'id'   => $id,
-        'name' => 'Kamrul Hasan',
-    ];
-    return view('customers.show', compact('customer'));
+Route::get('/customer', function () {
+    return view('customers.create');
 });
+
+Route::get('/customer1', function () {
+    return view('customers.create2');
+});
+
